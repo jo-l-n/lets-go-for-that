@@ -85,11 +85,14 @@ const SEASONAL_TASKS = [
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function getWeekId() {
-  const d = new Date(); d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
-  const ys = new Date(d.getFullYear(), 0, 4);
-  const wn = Math.round(((d - ys) / 86400000 + ys.getDay() + 3) / 7);
-  return d.getFullYear() + "-W" + String(wn).padStart(2, "0");
+  const d = new Date();
+  const day = d.getDay() || 7;
+  const thu = new Date(d);
+  thu.setDate(d.getDate() + 4 - day);
+  thu.setHours(0, 0, 0, 0);
+  const yearStart = new Date(thu.getFullYear(), 0, 1);
+  const wn = Math.ceil(((thu - yearStart) / 86400000 + 1) / 7);
+  return thu.getFullYear() + "-W" + String(wn).padStart(2, "0");
 }
 function getMonthId() { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0"); }
 function getQuarterId() { const d = new Date(); return d.getFullYear() + "-Q" + Math.ceil((d.getMonth() + 1) / 3); }
